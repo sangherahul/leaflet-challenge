@@ -9,3 +9,7 @@ var myMap = L.map("map", {
   id: "mapbox/streets-v11",
   accessToken: API_KEY
 }).addTo(myMap);
+
+var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+
+
