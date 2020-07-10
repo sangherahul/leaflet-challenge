@@ -1,6 +1,6 @@
 
  var myMap = L.map("map", {
-    center: [37.09, -95.71],
+    center: [0, 0],
     zoom: 2,
   
 });
@@ -58,7 +58,12 @@ var earthquakes = L.geoJSON(data, {
     createMaps(earthquakes)
   };
 
-  function createMaps(data){
+function createMaps(data){
+
+var url2 ="https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_steps.json"
+
+
+d3.json(url2, fdata=>{
 
   var dark = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -98,17 +103,33 @@ var baseMaps = {
   }).addTo(myMap);
 
 
-var overlayMaps = {
 
-    "Earthquakes": data
+
+var mapStyle = {
+    color: "Red",
+    fillOpacity: 0.5,
+    weight: 0.5
   };
- 
 
+  
+
+   var faulty = L.geoJson(fdata,{
+      // Passing in our style object
+      style: mapStyle
+    }).addTo(myMap);
+  
+  var overlayMaps = {
+
+    "Earthquakes": data,
+    "Fault Lines": faulty
+  };
 
 L.control.layers(baseMaps,overlayMaps,
   {collapsed:true
   
   }).addTo(myMap);
+
+})
 
 };
 
@@ -120,7 +141,10 @@ var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.ge
 
 
 d3.json(url, data=> createcircles(data.features));
-  
+
+
+
+
 // Legend
 // ____________________________________________________________________
 var legend = L.control({position: 'bottomright'});
